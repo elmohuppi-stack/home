@@ -16,7 +16,8 @@ Schlichte statische Landingpage für `elmarhepp.de` mit Verlinkungen zu:
 - `legal-config.js` – erzeugte Laufzeit-Konfiguration aus `.env`
 - `app.js` – bindet die Kontaktdaten in die Seiten ein
 - `Makefile` – lokale Startbefehle
-- `docs/hetzner-multi-app-template.md` – Vorlage für das spätere Deployment auf Hetzner
+- `docs/hetzner-multi-app-template.md` – allgemeine Vorlage für Multi-App-Deployment auf Hetzner
+- `docs/elmarhepp-root-deployment.md` – aktueller Live-Stand für `elmarhepp.de`
 
 ## Lokal starten
 
@@ -79,10 +80,11 @@ Mit dem `Makefile` kannst du einen einfachen Upload vorbereiten:
 make deploy DEPLOY_HOST=root@<hetzner-ip> DEPLOY_PATH=/var/www/elmarhepp.de
 ```
 
-Die vorhandene Vorlage dazu findest du in:
+Die vorhandenen Deployment-Notizen findest du in:
 
 ```text
 docs/hetzner-multi-app-template.md
+docs/elmarhepp-root-deployment.md
 ```
 
 ## Hinweis
