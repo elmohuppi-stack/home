@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Impressum · elmarhepp.de</title>
+    <meta name="description" content="Impressum von elmarhepp.de" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="legal-page">
+      <p class="eyebrow">elmarhepp.de</p>
+      <h1>Impressum</h1>
+
+      <div class="legal-card">
+        <p><strong>Angaben gemäß § 5 TMG</strong></p>
+        <p>
+          <span data-legal-text="name">Name</span><br />
+          <span data-legal-text="addressLine1">Straße und Hausnummer</span
+          ><br />
+          <span data-legal-text="addressLine2">PLZ Ort</span><br />
+          <span data-legal-text="country">Land</span>
+        </p>
+
+        <p>
+          <strong>Kontakt</strong><br />
+          E-Mail:
+          <a data-legal-email href="mailto:kontakt@example.com"
+            >kontakt@example.com</a
+          >
+        </p>
+
+        <p>
+          <strong>Inhaltlich verantwortlich gemäß § 18 Abs. 2 MStV</strong
+          ><br />
+          <span data-legal-text="responsible">Verantwortliche Person</span>
+        </p>
+
+        <p class="small-note">
+          Die Angaben werden aus deiner lokalen <code>.env</code> bzw. der
+          Deployment-Konfiguration geladen.
+        </p>
+      </div>
+
+      <p><a class="back-link" href="index.html">← Zurück zur Startseite</a></p>
+    </main>
+    <script src="legal-config.js"></script>
+    <script src="app.js" defer></script>
+  </body>
+</html>

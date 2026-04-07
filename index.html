@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>elmarhepp.de · Übersicht</title>
+    <meta
+      name="description"
+      content="Zentrale Landingpage von elmarhepp.de mit direkten Links zu Finanzen, Benzin und Elmo Scanner."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <p class="eyebrow">elmarhepp.de</p>
+        <h1>Der einfache Einstieg zu meinen Webprojekten.</h1>
+        <p class="hero-text">
+          Auf dieser Seite findest du meine wichtigsten Web-Tools und Projekte
+          gebündelt an einem Ort. Die Landingpage ist bewusst schlicht, schnell
+          und direkt gehalten.
+        </p>
+        <div class="hero-pills">
+          <span class="pill">3 Projekte</span>
+          <span class="pill">Direkt erreichbar</span>
+          <span class="pill">Statisch &amp; schnell</span>
+        </div>
+        <div class="hero-actions">
+          <a class="button primary" href="#projekte">Zu den Projekten</a>
+          <a class="button secondary" href="#kontakt">Kontakt &amp; Infos</a>
+        </div>
+      </header>
+
+      <main>
+        <section id="projekte" class="section">
+          <div class="section-heading">
+            <p class="eyebrow">Direktlinks</p>
+            <h2>Meine Websites</h2>
+          </div>
+
+          <div class="cards">
+            <a
+              class="card"
+              href="https://finanzen.elmarhepp.de/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span class="icon">💶</span>
+              <h3>Finanzen</h3>
+              <p>Übersicht und Tools rund um finanzielle Themen.</p>
+              <span class="card-link">finanzen.elmarhepp.de →</span>
+            </a>
+
+            <a
+              class="card"
+              href="https://benzin.elmarhepp.de/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span class="icon">⛽</span>
+              <h3>Benzin</h3>
+              <p>
+                Schneller Zugriff auf Infos und Auswertungen zum Thema
+                Spritpreise.
+              </p>
+              <span class="card-link">benzin.elmarhepp.de →</span>
+            </a>
+
+            <a
+              class="card"
+              href="https://elmo-scanner.elmarhepp.de/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span class="icon">📷</span>
+              <h3>Elmo Scanner</h3>
+              <p>
+                Scanner-Projekt mit direktem Einstieg und schneller Nutzung.
+              </p>
+              <span class="card-link">elmo-scanner.elmarhepp.de →</span>
+            </a>
+          </div>
+        </section>
+
+        <section class="section info-grid">
+          <div class="info-box">
+            <p class="eyebrow">Über diese Seite</p>
+            <h2>Kurz, übersichtlich und zentral</h2>
+            <p>
+              `elmarhepp.de` dient als Startpunkt für mehrere spezialisierte
+              Unterseiten und Projekte.
+            </p>
+            <ul>
+              <li>
+                <strong>Finanzen</strong> bündelt passende Finanz-Tools und
+                Übersichten.
+              </li>
+              <li>
+                <strong>Benzin</strong> bietet schnellen Zugriff auf Infos zu
+                Spritpreisen.
+              </li>
+              <li>
+                <strong>Elmo Scanner</strong> führt direkt in das
+                Scanner-Projekt.
+              </li>
+            </ul>
+          </div>
+
+          <div class="info-box accent">
+            <p class="eyebrow">Deployment</p>
+            <h2>Bereit für Hetzner</h2>
+            <p>
+              Die Seite bleibt bewusst statisch und leichtgewichtig. Damit passt
+              sie gut zu deinem Hetzner-Multi-App-Setup mit zentralem `nginx`,
+              Subdomains und HTTPS.
+            </p>
+            <p class="small-note">
+              Die Vorlage dafür liegt bereits in
+              `docs/hetzner-multi-app-template.md`.
+            </p>
+          </div>
+        </section>
+
+        <section id="kontakt" class="section">
+          <div class="section-heading">
+            <p class="eyebrow">Kontakt &amp; Rechtliches</p>
+            <h2>Platz für die nächsten Ergänzungen</h2>
+          </div>
+
+          <div class="contact-card">
+            <p>
+              Hier können später noch ein kurzer persönlicher Text, weitere
+              Projektlinks oder Hinweise zum aktuellen Status ergänzt werden.
+            </p>
+            <div class="footer-links">
+              <a data-legal-email href="mailto:kontakt@example.com"
+                >kontakt@example.com</a
+              >
+              <a href="impressum.html">Impressum</a>
+              <a href="datenschutz.html">Datenschutz</a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <p>© 2026 elmarhepp.de · Schlicht, schnell und direkt.</p>
+        <div class="footer-links">
+          <a href="impressum.html">Impressum</a>
+          <a href="datenschutz.html">Datenschutz</a>
+        </div>
+      </footer>
+    </div>
+    <script src="legal-config.js"></script>
+    <script src="app.js" defer></script>
+  </body>
+</html>

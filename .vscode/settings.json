@@ -1,0 +1,12 @@
+{
+  "chat.tools.terminal.autoApprove": {
+    "/^cd /Users/elmarhepp/workspace/home && bash scripts/generate-legal-config\\.sh && echo '\n--- \\.env ---' && grep '\\^VITE_LEGAL_' \\.env && echo '\n--- legal-config\\.js ---' && grep -En 'Elmar\\|gmail\\|Wörth' legal-config\\.js && echo '\n--- HTML-Bindings ---' && grep -En 'data-legal\\|legal-config\\.js\\|app\\.js' index\\.html impressum\\.html datenschutz\\.html$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "git init": true,
+    "git config": true,
+    "git add": true,
+    "git commit": true
+  }
+}
