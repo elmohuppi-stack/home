@@ -6,8 +6,24 @@
     <title>elmarhepp.de · Übersicht</title>
     <meta
       name="description"
-      content="Zentrale Landingpage von elmarhepp.de mit direkten Links zu Finanzen, Benzin und Elmo Scanner."
+      content="Zentrale Landingpage von elmarhepp.de mit direkten Links zu Finanzen, Benzin, Wetter, Mathe Quiz und Elmo Scanner."
     />
+    <script>
+      (function () {
+        try {
+          var storedTheme = localStorage.getItem("elmarhepp-theme");
+          var prefersLight =
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: light)").matches;
+
+          document.documentElement.dataset.theme =
+            storedTheme || (prefersLight ? "light" : "dark");
+        } catch (error) {
+          document.documentElement.dataset.theme = "dark";
+        }
+      })();
+    </script>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -21,13 +37,27 @@
           und direkt gehalten.
         </p>
         <div class="hero-pills">
-          <span class="pill">4 Projekte</span>
+          <span class="pill">5 Projekte</span>
           <span class="pill">Direkt erreichbar</span>
           <span class="pill">Statisch &amp; schnell</span>
         </div>
         <div class="hero-actions">
           <a class="button primary" href="#projekte">Zu den Projekten</a>
           <a class="button secondary" href="#kontakt">Kontakt &amp; Infos</a>
+          <button
+            class="button secondary theme-toggle"
+            type="button"
+            data-theme-toggle
+            aria-pressed="false"
+          >
+            <span
+              class="theme-toggle-icon"
+              data-theme-toggle-icon
+              aria-hidden="true"
+              >◐</span
+            >
+            <span data-theme-toggle-label>Theme wechseln</span>
+          </button>
         </div>
       </header>
 
@@ -89,9 +119,25 @@
               <span class="icon">🌤️</span>
               <h3>Wetter</h3>
               <p>
-                Aktuelle Wetterdaten, Vorhersagen und nützliche Wetterinformationen.
+                Aktuelle Wetterdaten, Vorhersagen und nützliche
+                Wetterinformationen.
               </p>
               <span class="card-link">wetter.elmarhepp.de →</span>
+            </a>
+
+            <a
+              class="card"
+              href="https://mathe-quiz.elmarhepp.de/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span class="icon">🧮</span>
+              <h3>Mathe Quiz</h3>
+              <p>
+                Kurze Matheaufgaben, spielerische Übungen und direkter Einstieg
+                ins Quiz.
+              </p>
+              <span class="card-link">mathe-quiz.elmarhepp.de →</span>
             </a>
           </div>
         </section>
@@ -116,6 +162,10 @@
               <li>
                 <strong>Elmo Scanner</strong> führt direkt in das
                 Scanner-Projekt.
+              </li>
+              <li>
+                <strong>Mathe Quiz</strong> bietet schnelle Übungen für kleine
+                und große Rechenpausen.
               </li>
             </ul>
           </div>

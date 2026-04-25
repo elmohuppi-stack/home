@@ -36,10 +36,16 @@ make generate
 Danach den lokalen Server starten:
 
 ```bash
+make dev
+```
+
+Der Browser wird dabei automatisch geoeffnet. Alternativ kannst du den Server auch manuell starten:
+
+```bash
 make serve
 ```
 
-Anschließend im Browser öffnen:
+Dann im Browser oeffnen:
 
 ```text
 http://localhost:8080
@@ -48,7 +54,7 @@ http://localhost:8080
 Optional mit anderem Port:
 
 ```bash
-make serve PORT=3000
+make dev PORT=3000
 ```
 
 ## Rechtliche Daten
