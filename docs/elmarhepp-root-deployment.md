@@ -1,6 +1,13 @@
 # Deployment-Dokumentation: `elmarhepp.de`
 
-Diese Datei dokumentiert den aktuellen Live-Stand der Landingpage auf dem Hetzner-Server.
+> **⚠️ Sonderfall – kein Docker-Deployment**
+>
+> Diese statische Landingpage ist **bewusst kein Teil des Docker-basierten Deployment-Standards**
+> (siehe [`deployment-standard.md`](deployment-standard.md)). Der Grund: Für 7 statische Dateien
+> (HTML, CSS, JS, SVG) einen Nginx-Container zu starten wäre Overkill. Stattdessen wird die Seite
+> per `rsync` direkt auf den Server kopiert und von Nginx über die `root`-Directive ausgeliefert.
+>
+> **Alle anderen Apps** (mit Backend, API, Datenbank) folgen dem Standard in `deployment-standard.md`.
 
 ## Ziel
 
@@ -134,7 +141,13 @@ Wenn weitere Apps hinzukommen, sollte das bestehende Muster beibehalten werden:
 Die allgemeine Vorlage dafür liegt in:
 
 ```text
-docs/hetzner-multi-app-template.md
+docs/hetzner-multi-app-template.md`
+```
+
+Der **Deployment-Standard** für alle Apps mit Backend/API/DB ist dokumentiert in:
+
+```text
+docs/deployment-standard.md
 ```
 
 ---
@@ -146,7 +159,7 @@ Wenn sich die Landingpage ändert:
 ```bash
 cd /Users/elmarhepp/workspace/home
 make generate
-rsync -av --delete --exclude '.git/' --exclude '.env' --exclude '.vscode/' ./ elmarhepp:/var/www/elmarhepp-root/
+make deploy DEPLOY_HOST=elmarhepp
 ```
 
 Da es eine statische Seite ist, ist normalerweise **kein Neustart einer App** nötig. `nginx` muss nur dann neu geladen werden, wenn sich die Server-Konfiguration selbst ändert.
