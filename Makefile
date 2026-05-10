@@ -1,4 +1,4 @@
-.PHONY: generate serve open dev deploy
+m.PHONY: generate serve open dev deploy
 
 PORT ?= 8080
 DEPLOY_HOST ?= root@your-hetzner-server
