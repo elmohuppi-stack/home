@@ -5,6 +5,7 @@ Schlichte statische Landingpage für `elmarhepp.de` mit Verlinkungen zu:
 - `https://finanzen.elmarhepp.de/`
 - `https://benzin.elmarhepp.de/`
 - `https://elmo-scanner.elmarhepp.de/`
+- `https://weknora.elmarhepp.de/`
 
 ## Dateien
 
