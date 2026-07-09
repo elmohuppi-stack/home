@@ -1,0 +1,1643 @@
+<!doctype html>
+<html lang="de">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title id="title">Mein Wiki</title>
+  <link
+    rel="icon"
+    type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%232563eb'/%3E%3Ctext x='50' y='70' font-size='65' font-weight='700' font-family='system-ui,sans-serif' text-anchor='middle' fill='white'%3EB%3C/text%3E%3C/svg%3E"
+  />
+
+  <style>
+    :root {
+      --font:
+        system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      --mono: SF Mono, Cascadia Code, Consolas, monospace;
+      --size: 14px;
+      --color: #1a1a1a;
+      --bg: #fff;
+      --sb-bg: #f5f5f5;
+      --sb-w: 260px;
+      --link: #2563eb;
+      --btn: #2563eb;
+      --btn-c: #fff;
+      --btn-r: 6px;
+      --bd: #e0e0e0;
+      --focus: #2563eb;
+      --ok: #16a34a;
+      --err: #dc2626;
+      --muted: #6b7280;
+      --h-mg: 1rem 0 0.5rem;
+      --h1: 1.8rem;
+      --h2: 1.5rem;
+      --h3: 1.3rem;
+      --gap: 0.5rem;
+    }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html {
+      font-family: var(--font);
+      font-size: var(--size);
+      color: var(--color);
+      background: var(--bg);
+      scroll-behavior: smooth;
+    }
+    body {
+      margin: 0;
+      display: flex;
+      min-height: 100vh;
+    }
+    a {
+      color: var(--link);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    a.wl {
+      border-bottom: 1px dotted var(--link);
+    }
+    a.wl::before {
+      content: "📄 ";
+      font-size: 0.8em;
+    }
+    a.wl:hover::after {
+      content: " (Wiki-Seite)";
+      font-size: 0.7em;
+      color: var(--muted);
+    }
+    a[href^="http"]::after {
+      content: " ↗";
+      font-size: 0.7em;
+    }
+    button {
+      cursor: pointer;
+      font: inherit;
+      font-size: inherit;
+    }
+    :focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+    input,
+    textarea {
+      font: inherit;
+      font-size: inherit;
+      border: 1px solid var(--bd);
+      border-radius: var(--btn-r);
+      padding: 8px 10px;
+      width: 100%;
+    }
+    input:focus,
+    textarea:focus {
+      outline: 2px solid var(--focus);
+      outline-offset: -1px;
+      border-color: transparent;
+    }
+
+    /* Sidebar */
+    #sb {
+      width: var(--sb-w);
+      background: var(--sb-bg);
+      border-right: 1px solid var(--bd);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 10;
+    }
+    #sb header {
+      padding: 1rem;
+      border-bottom: 1px solid var(--bd);
+    }
+    #sb header h1 {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+    #sb header h1 a {
+      color: var(--color);
+    }
+    #sb #s-i {
+      margin-top: 0.5rem;
+    }
+    #pl {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.5rem 0;
+    }
+    #pl a {
+      display: block;
+      padding: 6px 1rem;
+      color: var(--color);
+      border-left: 3px solid transparent;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    #pl a:hover,
+    #pl a.act {
+      background: rgba(0, 0, 0, 0.05);
+      border-left-color: var(--link);
+      text-decoration: none;
+    }
+    #pl a.act {
+      font-weight: 600;
+    }
+    #sb footer {
+      padding: 0.75rem 1rem;
+      border-top: 1px solid var(--bd);
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    #sb footer button {
+      flex: 1;
+      padding: 6px 10px;
+      background: var(--btn);
+      color: var(--btn-c);
+      border: 0;
+      border-radius: var(--btn-r);
+    }
+
+    /* Main content */
+    #main {
+      flex: 1;
+      margin-left: var(--sb-w);
+      padding: 2rem;
+      max-width: 960px;
+      min-height: 100vh;
+    }
+    #main h1 {
+      font-size: var(--h1);
+      margin: var(--h-mg);
+    }
+    #main h2 {
+      font-size: var(--h2);
+      margin: var(--h-mg);
+    }
+    #main h3 {
+      font-size: var(--h3);
+      margin: var(--h-mg);
+    }
+    #main h4 {
+      margin: var(--h-mg);
+    }
+    #main p {
+      margin: 0.5rem 0;
+      line-height: 1.6;
+    }
+    #main ul,
+    #main ol {
+      margin: 0.5rem 0;
+      padding-left: 1.5rem;
+    }
+    #main li {
+      margin: 0.25rem 0;
+    }
+    #main li.t {
+      list-style: none;
+      margin-left: -1.5rem;
+    }
+    #main li.t input[type="checkbox"] {
+      width: auto;
+      margin-right: 0.4rem;
+    }
+    #main table {
+      border-collapse: collapse;
+      margin: 0.5rem 0;
+      width: 100%;
+    }
+    #main th,
+    #main td {
+      border: 1px solid var(--bd);
+      padding: 6px 10px;
+      text-align: left;
+    }
+    #main th {
+      background: var(--sb-bg);
+      font-weight: 600;
+    }
+    #main blockquote {
+      border-left: 3px solid var(--link);
+      padding: 0.25rem 1rem;
+      margin: 0.5rem 0;
+      color: var(--muted);
+      background: rgba(37, 99, 235, 0.04);
+    }
+    #main pre {
+      background: #f8f8f8;
+      border: 1px solid var(--bd);
+      border-radius: var(--btn-r);
+      padding: 0.75rem 1rem;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      margin: 0.5rem 0;
+    }
+    #main code {
+      font-family: var(--mono);
+      font-size: 0.9em;
+      background: #f0f0f0;
+      padding: 2px 5px;
+      border-radius: 3px;
+    }
+    #main pre code {
+      background: 0 0;
+      padding: 0;
+    }
+    #main hr {
+      border: 0;
+      border-top: 2px solid var(--bd);
+      margin: 1.5rem 0;
+    }
+    #main img {
+      max-width: 100%;
+      height: auto;
+      border-radius: var(--btn-r);
+    }
+
+    /* Buttons inside main */
+    .btn {
+      padding: 8px 16px;
+      border: 0;
+      border-radius: var(--btn-r);
+      cursor: pointer;
+      font-size: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-p {
+      background: var(--btn);
+      color: var(--btn-c);
+    }
+    .btn-d {
+      background: var(--err);
+      color: #fff;
+    }
+    .btn-o {
+      background: 0 0;
+      border: 1px solid var(--bd);
+      color: var(--color);
+    }
+    .btn-s {
+      background: var(--ok);
+      color: #fff;
+    }
+    .btn-sm {
+      padding: 4px 10px;
+      font-size: 0.85rem;
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    /* Page list items */
+    .pg-e {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--bd);
+      border-radius: var(--btn-r);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .pg-e:hover {
+      background: var(--sb-bg);
+    }
+    .pg-e .pg-t {
+      flex: 1;
+      overflow: hidden;
+    }
+    .pg-e .pg-t a {
+      font-weight: 600;
+      font-size: 1.05rem;
+    }
+    .pg-e .pg-t .pg-d {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .pg-e .pg-s,
+    .pg-e .pg-x {
+      background: 0 0;
+      border: 0;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    .pg-e .pg-s:hover,
+    .pg-e .pg-x:hover {
+      background: rgba(0, 0, 0, 0.08);
+    }
+
+    /* Editor */
+    #ed-s {
+      display: flex;
+      gap: 1rem;
+      min-height: 60vh;
+      margin-top: 1rem;
+    }
+    #ed-s textarea,
+    #ed-s #ed-p {
+      flex: 1;
+      min-width: 0;
+      padding: 1rem;
+      border: 1px solid var(--bd);
+      border-radius: var(--btn-r);
+    }
+    #ed-s textarea {
+      resize: none;
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      tab-size: 2;
+    }
+    #ed-s #ed-p {
+      overflow-y: auto;
+      background: var(--bg);
+    }
+    #ed-s #ed-p > :first-child {
+      margin-top: 0;
+    }
+    #ed-h {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--bd);
+      margin-bottom: 1rem;
+    }
+    #ed-h .ed-st {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-left: auto;
+    }
+    /* Editor Toolbar */
+    #ed-tb {
+      display: flex;
+      gap: 2px;
+      flex-wrap: wrap;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--bd);
+      margin-bottom: 0;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: var(--bg);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+    #ed-tb button {
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      padding: 3px 7px;
+      font-size: 0.85rem;
+      line-height: 1.2;
+      color: var(--color);
+      white-space: nowrap;
+    }
+    #ed-tb button:hover {
+      background: rgba(0, 0, 0, 0.06);
+      border-color: var(--bd);
+    }
+    #ed-tb button:active {
+      background: rgba(0, 0, 0, 0.1);
+    }
+    #ed-tb .tb-s {
+      border-left: 1px solid var(--bd);
+      width: 0;
+      padding: 0;
+      margin: 2px 3px;
+      height: 1.2rem;
+    }
+    #ed-tb .tb-lbl {
+      font-size: 0.65rem;
+      color: var(--muted);
+      padding: 3px 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Status bar */
+    #st {
+      position: fixed;
+      bottom: 0;
+      left: var(--sb-w);
+      right: 0;
+      padding: 4px 1rem;
+      font-size: 0.8rem;
+      text-align: center;
+      z-index: 20;
+      transition: opacity 0.3s;
+      opacity: 0;
+      pointer-events: none;
+    }
+    #st.sh {
+      opacity: 1;
+    }
+    #st.st-ok {
+      background: var(--ok);
+      color: #fff;
+    }
+    #st.st-err {
+      background: var(--err);
+      color: #fff;
+    }
+    #st.st-info {
+      background: var(--link);
+      color: #fff;
+    }
+
+    /* Search */
+    #sr {
+      padding: 0.5rem 0;
+    }
+    #sr .sr-r {
+      padding: 6px 0;
+      border-bottom: 1px solid var(--bd);
+    }
+    #sr .sr-r:last-child {
+      border: 0;
+    }
+    #sr .sr-r a {
+      font-weight: 600;
+    }
+    #sr .sr-r .sr-ex {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    #sr .sr-r .sr-ex em {
+      background: #fef08a;
+      font-style: normal;
+      padding: 1px 3px;
+      border-radius: 2px;
+    }
+
+    /* Settings */
+    #set label {
+      display: block;
+      font-weight: 600;
+      margin-top: 1rem;
+      margin-bottom: 0.3rem;
+    }
+    #set input,
+    #set textarea {
+      max-width: 500px;
+    }
+    #set textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+    #set .imp {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--bd);
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    #set .imp a {
+      color: var(--muted);
+      text-decoration: underline;
+    }
+    #set .imp a:hover {
+      color: var(--link);
+    }
+
+    /* Empty state */
+    .empty {
+      padding: 2rem;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    /* Notifications */
+    #noti {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    #noti > div {
+      padding: 0.75rem 1rem;
+      border-radius: var(--btn-r);
+      color: #fff;
+      animation: n 0.3s ease;
+      max-width: 350px;
+    }
+    #noti > div.n-ok {
+      background: var(--ok);
+    }
+    #noti > div.n-err {
+      background: var(--err);
+    }
+    #noti > div.n-info {
+      background: var(--link);
+    }
+    @keyframes n {
+      from {
+        opacity: 0;
+        transform: translateX(1rem);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Modal overlay */
+    #mo {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #mo > div {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 1.5rem;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    }
+    #mo h3 {
+      margin-bottom: 1rem;
+    }
+    #mo .mo-b {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: flex-end;
+      margin-top: 1rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 700px) {
+      #sb {
+        position: fixed;
+        width: 100%;
+        height: auto;
+        bottom: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--bd);
+        flex-direction: row;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        z-index: 50;
+      }
+      #sb header {
+        padding: 0;
+        border: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      #sb header h1 {
+        font-size: 1rem;
+      }
+      #sb #s-i {
+        margin: 0;
+        width: auto;
+        flex: 1;
+      }
+      #pl,
+      #sb footer {
+        display: none;
+      }
+      #main {
+        margin-left: 0;
+        margin-top: 3.5rem;
+        padding: 1rem;
+      }
+      #st {
+        left: 0;
+      }
+      #ed-s {
+        flex-direction: column;
+      }
+      #ed-s textarea,
+      #ed-s #ed-p {
+        min-height: 40vh;
+      }
+    }
+  </style>
+
+  <div id="sb">
+    <header>
+      <h1><a href="?" id="wt">Wiki</a></h1>
+      <input id="s-i" type="search" placeholder="Suche…" autocomplete="off" />
+    </header>
+    <nav id="pl"></nav>
+    <footer>
+      <button id="bn">+ Neue Seite</button>
+      <button id="bs">⚙ Einstellungen</button>
+    </footer>
+  </div>
+
+  <main id="main"></main>
+  <div id="st"></div>
+  <div id="noti"></div>
+
+  <script>
+    // ═══════════════════════════════════════════
+    // LIB: Event Emitter
+    // ═══════════════════════════════════════════
+    const EE = new (class {
+      constructor() {
+        this._e = {};
+      }
+      on(e, f) {
+        (this._e[e] = this._e[e] || []).push(f);
+      }
+      off(e, f) {
+        const l = this._e[e];
+        l && (this._e[e] = l.filter((i) => i !== f));
+      }
+      emit(e, ...a) {
+        (this._e[e] || []).forEach((f) => f(...a));
+      }
+    })();
+
+    // ═══════════════════════════════════════════
+    // LIB: Storage (localStorage — works with file://)
+    // ═══════════════════════════════════════════
+    const ST = {
+      _pages: null,
+      _meta: null,
+      KEY: "wiki_data",
+      load() {
+        try {
+          const raw = localStorage.getItem(this.KEY);
+          if (raw) {
+            const d = JSON.parse(raw);
+            this._pages = d.pages || [];
+            this._meta = d.meta || { title: "Mein Wiki", description: "" };
+          } else {
+            this._pages = [];
+            this._meta = { title: "Mein Wiki", description: "" };
+          }
+        } catch (e) {
+          this._pages = [];
+          this._meta = { title: "Mein Wiki", description: "" };
+        }
+        return this;
+      },
+      save() {
+        try {
+          localStorage.setItem(
+            this.KEY,
+            JSON.stringify({ pages: this._pages, meta: this._meta }),
+          );
+        } catch (e) {
+          console.error("save", e);
+        }
+      },
+      getAllPages() {
+        return this._pages;
+      },
+      getPage(id) {
+        return this._pages.find((p) => p.id === id) || null;
+      },
+      putPage(p) {
+        p.updated = Date.now();
+        const i = this._pages.findIndex((x) => x.id === p.id);
+        if (i > -1) this._pages[i] = p;
+        else this._pages.push(p);
+        this.save();
+      },
+      delPage(id) {
+        this._pages = this._pages.filter((x) => x.id !== id);
+        this.save();
+      },
+      getMeta() {
+        return this._meta;
+      },
+      putMeta(v) {
+        this._meta = v;
+        this.save();
+      },
+    };
+    ST.load();
+
+    // ═══════════════════════════════════════════
+    // LIB: Markdown Parser
+    // ═══════════════════════════════════════════
+    function md(t) {
+      if (!t) return "";
+      const es = (text) =>
+        text
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      let html = [],
+        codeBlocks = [],
+        id = 0;
+      // Extract code blocks
+      t = t.replace(/```(\w*)\n?([\s\S]*?)```/gm, (_, l, c) => {
+        const n = id++;
+        codeBlocks[n] = { lang: l, code: c.replace(/^`*|`*$/g, "") };
+        return `\x00CODE${n}\x00`;
+      });
+      // Extract inline HTML tags
+      t = t.replace(/<\/?[a-zA-Z][^>]*>/g, (m) => {
+        const n = id++;
+        html[n] = m;
+        return `\x00HTML${n}\x00`;
+      });
+      // Blockquotes — handle before HTML escaping (> would become &gt;)
+      t = t.replace(/^>\s+(.*)$/gm, "<blockquote>$1</blockquote>");
+      t = t.replace(/<\/blockquote>\n<blockquote>/g, "\n");
+      // Protect blockquote tags from escaping
+      t = t.replace(/<\/?blockquote>/g, (m) => {
+        const n = id++;
+        html[n] = m;
+        return `\x00HTML${n}\x00`;
+      });
+      // Escape HTML except our markers
+      t = es(t);
+      // Restore HTML markers
+      t = t.replace(/\x00HTML(\d+)\x00/g, (_, n) => html[+n]);
+      // Headings
+      t = t.replace(
+        /^(#{1,6})\s+(.*)$/gm,
+        (_, h, text) => `<h${h.length}>${text.trim()}</h${h.length}>`,
+      );
+      // Bold/Italic/Strikethrough (order: *** before ** before *)
+      t = t.replace(/\*\*\*(.+?)\*\*\*/g, "<strong><em>$1</em></strong>");
+      t = t.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+      t = t.replace(/\*(.+?)\*/g, "<em>$1</em>");
+      t = t.replace(/~~(.+?)~~/g, "<del>$1</del>");
+      // Images & links
+      t = t.replace(
+        /!\[([^\]]*)\]\(([^\s)]+)(?:\s+"([^"]*)")?\)/g,
+        (_, alt, src, title) =>
+          `<img src="${src}" alt="${alt}"${title ? ` title="${title}"` : ""}>`,
+      );
+      t = t.replace(
+        /\[([^\]]*)\]\(([^\s)]+)(?:\s+"([^"]*)")?\)/g,
+        (_, text, href, title) =>
+          `<a href="${href}"${title ? ` title="${title}"` : ""}>${text}</a>`,
+      );
+      // Wiki links [[Seite]] or [[text|seite]] — slugify + class for styling
+      t = t.replace(
+        /\[\[([^\]|]+)\|([^\]]+)\]\]/g,
+        (_, text, page) =>
+          `<a href="?page=${slugify(page)}" class=wl>${text}</a>`,
+      );
+      t = t.replace(
+        /\[\[([^\]]+)\]\]/g,
+        (_, text) => `<a href="?page=${slugify(text)}" class=wl>${text}</a>`,
+      );
+      // Horizontal rules
+      t = t.replace(/^(?:[-*_]){3,}\s*$/gm, "<hr>");
+      // Unordered lists
+      t = t.replace(/^[\t ]*[-*+]\s+(.*)$/gm, "<li>$1</li>");
+      t = t.replace(/(?:<li>.*<\/li>\n?)+/g, (m) => `<ul>${m}</ul>`);
+      // Ordered lists
+      t = t.replace(/^[\t ]*\d+[.)]\s+(.*)$/gm, "<li>$1</li>");
+      t = t.replace(/(?:<li>.*?<\/li>\n?)+/g, (m) =>
+        /<ul>/.test(m) ? m : `<ol>${m}</ol>`,
+      );
+      // Fix nested lists
+      t = t.replace(/<ul>\s*<li>(\s*<ul>)/g, "<li>$1");
+      t = t.replace(/<ol>\s*<li>(\s*<ol>)/g, "<li>$1");
+      t = t.replace(/(<\/ul>\s*)<\/li>\s*<\/ul>/g, "$1</ul>");
+      t = t.replace(/(<\/ol>\s*)<\/li>\s*<\/ol>/g, "$1</ol>");
+      t = t.replace(/<\/ul>\n?<ul>/g, "");
+      t = t.replace(/<\/ol>\n?<ol>/g, "");
+      t = t.replace(/<ul>\s*<ol>/g, "<ul>");
+      t = t.replace(/<\/ol>\s*<\/ul>/g, "</ul>");
+      t = t.replace(/<ol>\s*<ul>/g, "<ol>");
+      t = t.replace(/<\/ul>\s*<\/ol>/g, "</ol>");
+      // Tables — convert | ... | ... | to HTML table
+      t = t.replace(/^\|(.+)\|$/gm, (m) => {
+        const cells = m
+          .slice(1, -1)
+          .split("|")
+          .map((c) => c.trim());
+        return "<tr><td>" + cells.join("</td><td>") + "</td></tr>";
+      });
+      t = t.replace(/(<tr>.*<\/tr>\n?)+/g, (m) => {
+        // Check if first row is a header (contains ---)
+        const lines = m.trim().split("\n");
+        let header = "";
+        let body = m;
+        if (lines.length > 1 && /^<tr><td>-{3,}/.test(lines[1])) {
+          header = lines[0];
+          body = lines.slice(2).join("\n");
+          header = header.replace(/<td>/g, "<th>").replace(/<\/td>/g, "<\/th>");
+          return (
+            "<table><thead>" +
+            header +
+            "</thead><tbody>" +
+            body +
+            "</tbody></table>"
+          );
+        }
+        return "<table>" + m + "</table>";
+      });
+      // Task lists: - [ ] and - [x]
+      t = t.replace(
+        /<li>\[ \] /g,
+        "<li class=t><input type=checkbox disabled> ",
+      );
+      t = t.replace(
+        /<li>\[x\] /g,
+        "<li class=t><input type=checkbox disabled checked> ",
+      );
+      // Inline code
+      t = t.replace(/`([^`]+)`/g, "<code>$1</code>");
+      // Paragraphs — wrap remaining text blocks
+      let lines = t
+        .split("\n\n")
+        .map((b) => {
+          b = b.trim();
+          if (!b) return "";
+          if (
+            /^<(?:h[1-6]|ul|ol|li|blockquote|pre|hr|div|table|img)/.test(b) ||
+            (/<\/[a-z]+>$/.test(b) && !/^<(?:p|a|em|strong|code|del)/.test(b))
+          )
+            return b;
+          return `<p>${b.replace(/\n/g, "<br>")}</p>`;
+        })
+        .join("\n");
+      // Restore code blocks
+      for (let n = 0; n < codeBlocks.length; n++) {
+        const { lang, code } = codeBlocks[n];
+        lines = lines.replace(
+          `\x00CODE${n}\x00`,
+          `<pre><code${lang ? ` class="language-${lang}"` : ""}>${es(code)}</code></pre>`,
+        );
+      }
+      return lines;
+    }
+
+    // ═══════════════════════════════════════════
+    // APP: State & Navigation
+    // ═══════════════════════════════════════════
+    const A = {
+      p: [],
+      m: { title: "Mein Wiki", description: "" },
+      edits: null,
+      ed: { showPreview: true },
+      stTm: null,
+    };
+
+    function nav(u) {
+      history.pushState({}, "", u || "?");
+      render();
+    }
+    window.addEventListener("popstate", render);
+
+    // ═══════════════════════════════════════════
+    // APP: Notifications & Status
+    // ═══════════════════════════════════════════
+    function noti(msg, type = "info", dur = 3000) {
+      const d = document.createElement("div");
+      d.className = "n-" + type;
+      d.textContent = msg;
+      document.getElementById("noti").appendChild(d);
+      setTimeout(() => d.remove(), dur);
+    }
+    function st(msg, type = "ok", dur = 2000) {
+      const e = document.getElementById("st");
+      e.textContent = msg;
+      e.className = "sh st-" + type;
+      clearTimeout(A.stTm);
+      A.stTm = setTimeout(() => (e.className = ""), dur);
+    }
+
+    // ═══════════════════════════════════════════
+    // APP: Views
+    // ═══════════════════════════════════════════
+    function render() {
+      const q = Object.fromEntries(new URLSearchParams(location.search));
+      const main = document.getElementById("main"),
+        pl = document.getElementById("pl");
+      renderPageList(pl);
+      if (q.settings !== void 0) renderSettings(main);
+      else if (q.edit !== void 0) renderEditor(main, q.edit);
+      else if (q.search !== void 0) renderSearch(main, q.search);
+      else if (q.page !== void 0) renderPage(main, q.page);
+      else renderAllPages(main);
+    }
+
+    function renderPageList(el) {
+      const q = Object.fromEntries(new URLSearchParams(location.search));
+      const curPage = q.page || "";
+      el.innerHTML =
+        A.p
+          .map(
+            (p) =>
+              `<a href="?page=${encodeURIComponent(p.slug)}" data-slug="${esc(p.slug)}"${p.slug === curPage ? " class=act" : ""}>${esc(p.title)}</a>`,
+          )
+          .join("") || "<div class=empty>Keine Seiten</div>";
+    }
+
+    // Global click handler for sidebar links (prevents full page reload)
+    document.addEventListener("click", (e) => {
+      const a = e.target.closest("#pl a");
+      if (a) {
+        e.preventDefault();
+        const slug = a.dataset.slug;
+        if (slug) nav("?page=" + encodeURIComponent(slug));
+        else nav(a.getAttribute("href") || "?");
+      }
+    });
+
+    function renderAllPages(el) {
+      document.title = A.m.title;
+      let html = `<header style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem"><h1>Alle Seiten</h1><button class="btn btn-p" onclick="nav('?edit=')">+ Neue Seite</button></header>`;
+      if (!A.p.length)
+        html += `<div class=empty><p>Noch keine Seiten.</p><p><button class="btn btn-p" onclick="nav('?edit=')" style=margin-top:1rem>Erste Seite anlegen</button></p></div>`;
+      else
+        html += A.p
+          .map(
+            (p) =>
+              `<div class=pg-e><div class=pg-t><a href="?page=${encodeURIComponent(p.slug)}">${esc(p.title)}</a><div class=pg-d>${p.updated ? date(p.updated) : ""}</div></div><button class=pg-s onclick="nav('?edit=${encodeURIComponent(p.slug)}')" title="Bearbeiten">✏️</button><button class=pg-x onclick="delPage('${p.id}')" title="Löschen">🗑️</button></div>`,
+          )
+          .join("");
+      el.innerHTML = html;
+    }
+
+    function renderPage(el, slug) {
+      if (!slug) {
+        renderAllPages(el);
+        return;
+      }
+      const slugLc = slug.toLowerCase();
+      const p = A.p.find((x) => x.slug.toLowerCase() === slugLc);
+      if (!p) {
+        const title = slug
+          .replace(/_/g, " ")
+          .replace(/\b\w/g, (c) => c.toUpperCase());
+        const mo = document.createElement("div");
+        mo.id = "mo";
+        mo.innerHTML = `<div><h3>Seite nicht gefunden</h3><p>Die Seite "${esc(title)}" existiert noch nicht.</p><div class=mo-b><button class="btn btn-o" onclick="this.closest('#mo').remove();nav('?')">Abbrechen</button><button class="btn btn-p" id=mo-c>Seite anlegen</button></div></div>`;
+        document.body.appendChild(mo);
+        document.getElementById("mo-c").onclick = () => {
+          mo.remove();
+          nav(
+            "?edit=" +
+              encodeURIComponent(slug) +
+              "&title=" +
+              encodeURIComponent(title),
+          );
+        };
+        el.innerHTML = `<header><h1>Seite nicht gefunden</h1></header><div class=empty><p>Die Seite "${esc(slug)}" existiert nicht.</p></div>`;
+        document.title = "404 | " + A.m.title;
+        return;
+      }
+      document.title = p.title + " | " + A.m.title;
+      el.innerHTML =
+        `<header style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem"><h1>${esc(p.title)}</h1><div style=display:flex;gap:4px><button class="btn btn-p btn-sm" onclick="nav('?edit=${encodeURIComponent(p.slug)}')">✏️ Bearbeiten</button><button class="btn btn-o btn-sm" onclick="expPage('${p.id}')">📥 .md</button><button class="btn btn-d btn-sm" onclick="delPage('${p.id}')">🗑️</button></div></header>` +
+        md(p.content);
+    }
+
+    function renderEditor(el, slug) {
+      const qp = Object.fromEntries(new URLSearchParams(location.search));
+      const isNew =
+        !slug || !A.p.find((x) => x.slug.toLowerCase() === slug.toLowerCase());
+      const p = isNew
+        ? {
+            title:
+              qp.title ||
+              (slug
+                ? slug
+                    .replace(/_/g, " ")
+                    .replace(/\b\w/g, (c) => c.toUpperCase())
+                : ""),
+            slug: slug || "",
+            content: "",
+            id: "",
+          }
+        : A.p.find((x) => x.slug.toLowerCase() === slug.toLowerCase());
+      if (!A.edits || A.edits.id !== p.id)
+        A.edits = {
+          id: p.id,
+          title: p.title,
+          slug: p.slug,
+          content: p.content,
+          origContent: p.content,
+        };
+      document.title =
+        (isNew ? "Neue Seite" : "Bearbeiten: " + p.title) + " | " + A.m.title;
+
+      el.innerHTML = `<div id=ed-h><h1 style=margin:0>${isNew ? "Neue Seite" : esc(p.title)}</h1><span class=ed-st id=ed-st></span></div>
+  <div style=display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem>
+    <div style=flex:2;min-width:200px><label style=font-weight:600;display:block;margin-bottom:4px>Titel</label><input id=ed-t value="${esc(p.title)}" oninput="edT(this.value)" placeholder="Seitentitel"></div>
+    <div style=flex:1;min-width:150px><label style=font-weight:600;display:block;margin-bottom:4px>Slug (URL)</label><input id=ed-slug value="${esc(p.slug)}" oninput="edS(this.value)" placeholder="seiten-slug"></div>
+  </div>
+  <div style=display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem>
+    <button class="btn btn-p btn-sm" id=ed-m onclick="togglePreview()">👁️ Vorschau</button>
+    <button class="btn btn-sm" id=ed-w style="background:0 0;border:1px solid var(--bd);color:var(--color)" onclick="toggleWrap()">↔️ Wrap</button>
+    <span style=flex:1></span>
+    <button class="btn btn-s btn-sm" onclick="savePage()">💾 Speichern</button>
+    <button class="btn btn-o btn-sm" onclick="nav('?page=${encodeURIComponent(p.slug || "")}')">Abbrechen</button>
+  </div>
+  <div id=ed-tb>
+    <button onclick="fm('bold')" title="Fett (Ctrl+B)"><b>B</b></button>
+    <button onclick="fm('italic')" title="Kursiv (Ctrl+I)"><i>I</i></button>
+    <button onclick="fm('code')" title="Code (Ctrl+\`)">&lt;/&gt;</button>
+    <span class=tb-s></span>
+    <button onclick="fm('h1')" title="Überschrift 1">H1</button>
+    <button onclick="fm('h2')" title="Überschrift 2">H2</button>
+    <button onclick="fm('h3')" title="Überschrift 3">H3</button>
+    <span class=tb-s></span>
+    <button onclick="fm('ul')" title="Aufzählung">•</button>
+    <button onclick="fm('ol')" title="Nummerierte Liste">1.</button>
+    <button onclick="fm('task')" title="Checkbox">☐</button>
+    <button onclick="fm('quote')" title="Zitat">❞</button>
+    <button onclick="fm('hr')" title="Trennlinie">—</button>
+    <button onclick="fm('table')" title="Tabelle">⊞</button>
+    <span class=tb-s></span>
+    <button onclick="fm('pre')" title="Code-Block">▣</button>
+    <span class=tb-s></span>
+    <button onclick="fm('link')" title="Link">🔗</button>
+    <button onclick="fm('img')" title="Bild">🖼</button>
+    <button onclick="fm('wlink')" title="Wiki-Link [[Seite]]">⫧</button>
+  </div>
+  <div id=ed-s><textarea id=ed-ta placeholder="Markdown hier eingeben…" oninput="edC(this.value)">${esc(p.content)}</textarea><div id=ed-p style="${A.ed.showPreview ? "" : "display:none"}">${p.content ? md(p.content) : "<p class=empty>Vorschau</p>"}</div></div>`;
+
+      const ta = document.getElementById("ed-ta");
+      if (ta) ta.focus();
+      A.ed.showPreview = true;
+    }
+
+    function togglePreview() {
+      A.ed.showPreview = !A.ed.showPreview;
+      const p = document.getElementById("ed-p");
+      if (p) p.style.display = A.ed.showPreview ? "" : "none";
+      document.getElementById("ed-m").textContent = A.ed.showPreview
+        ? "👁️ Vorschau"
+        : "👁️ Zeigen";
+    }
+
+    function toggleWrap() {
+      const ta = document.getElementById("ed-ta");
+      if (ta) {
+        ta.style.whiteSpace =
+          ta.style.whiteSpace === "pre" ? "pre-wrap" : "pre";
+        document.getElementById("ed-w").style.background =
+          ta.style.whiteSpace === "pre" ? "rgba(0,0,0,.05)" : "transparent";
+      }
+    }
+
+    // Format helper for toolbar buttons
+    function fm(type) {
+      const ta = document.getElementById("ed-ta");
+      if (!ta) return;
+      const s = ta.selectionStart,
+        e = ta.selectionEnd;
+      const sel = ta.value.slice(s, e);
+      const pre = ta.value.slice(0, s),
+        post = ta.value.slice(e);
+      const ins = (before, after, placeholder) => {
+        const txt = sel || placeholder;
+        ta.value = pre + before + txt + after + post;
+        const p = s + before.length;
+        ta.selectionStart = p;
+        ta.selectionEnd = p + txt.length;
+        ta.focus();
+        ta.dispatchEvent(new Event("input"));
+      };
+      const ln = (prefix, placeholder) => {
+        const txt = sel || placeholder;
+        const before = pre.endsWith("\n") || pre === "" ? "" : "\n";
+        const after = post.startsWith("\n") || post === "" ? "" : "\n";
+        ta.value = pre + before + prefix + txt + after + post;
+        const p = s + before.length + prefix.length;
+        ta.selectionStart = p;
+        ta.selectionEnd = p + txt.length;
+        ta.focus();
+        ta.dispatchEvent(new Event("input"));
+      };
+      switch (type) {
+        case "bold":
+          ins("**", "**", "fetter Text");
+          break;
+        case "italic":
+          ins("*", "*", "kursiver Text");
+          break;
+        case "code":
+          ins("`", "`", "code");
+          break;
+        case "pre":
+          ins("```\n", "\n```", "code");
+          break;
+        case "h1":
+          ln("# ", "Überschrift");
+          break;
+        case "h2":
+          ln("## ", "Überschrift");
+          break;
+        case "h3":
+          ln("### ", "Überschrift");
+          break;
+        case "ul":
+          ln("- ", "Listenpunkt");
+          break;
+        case "ol":
+          ln("1. ", "Listenpunkt");
+          break;
+        case "quote":
+          ln("> ", "Zitat");
+          break;
+        case "hr":
+          ins("", "", "\n---\n");
+          ta.value = pre + "\n---\n" + post;
+          ta.selectionStart = ta.selectionEnd = s + 5;
+          ta.focus();
+          ta.dispatchEvent(new Event("input"));
+          break;
+        case "link":
+          ins("[", "](https://)", "Linktext");
+          break;
+        case "img":
+          ins("![](", ")", "Bild-URL");
+          break;
+        case "wlink":
+          ins("[[", "]]", "Seitenname");
+          break;
+        case "task":
+          ln("- [ ] ", "Aufgabe");
+          break;
+        case "table":
+          ins(
+            "",
+            "",
+            "\n| Spalte 1 | Spalte 2 |\n|----------|----------|\n| Zelle    | Zelle    |",
+          );
+          ta.value =
+            pre +
+            "\n| Spalte 1 | Spalte 2 |\n|----------|----------|\n| Zelle    | Zelle    |" +
+            post;
+          const tp = s + 1;
+          ta.selectionStart = tp;
+          ta.selectionEnd = tp;
+          ta.focus();
+          ta.dispatchEvent(new Event("input"));
+          break;
+      }
+    }
+
+    function edT(v) {
+      if (A.edits) {
+        A.edits.title = v;
+        A.edits.slug = slugify(v);
+        const s = document.getElementById("ed-slug");
+        if (s) s.value = A.edits.slug;
+      }
+      autoSave();
+    }
+    function edS(v) {
+      if (A.edits) {
+        A.edits.slug = slugify(v);
+        autoSave();
+      }
+    }
+    function edC(v) {
+      if (A.edits) {
+        A.edits.content = v;
+        const p = document.getElementById("ed-p");
+        if (p && p.style.display !== "none")
+          p.innerHTML = md(v) || "<p class=empty>Vorschau</p>";
+      }
+      autoSave();
+    }
+
+    let _asTm = null;
+    function autoSave() {
+      clearTimeout(_asTm);
+      _asTm = setTimeout(() => {
+        if (A.edits) savePage(true);
+      }, 800);
+    }
+
+    function savePage(silent) {
+      if (!A.edits) return;
+      const { id, title, slug, content, origContent } = A.edits;
+      if (!title.trim()) return noti("Titel darf nicht leer sein", "err");
+      const slug2 = slug || slugify(title);
+      const existing = A.p.find((p) => p.slug === slug2 && p.id !== id);
+      if (existing) return noti("Slug wird bereits verwendet: " + slug2, "err");
+
+      const now = Date.now();
+      const page = {
+        id: id || "p_" + now + "_" + Math.random().toString(36).slice(2, 6),
+        title: title.trim(),
+        slug: slug2,
+        content: content,
+        created: id ? A.p.find((p) => p.id === id)?.created || now : now,
+        updated: now,
+      };
+      ST.putPage(page);
+      if (!silent) noti("Gespeichert: " + page.title, "ok");
+      st("Gespeichert ✓", "ok");
+      const idx = A.p.findIndex((p) => p.id === page.id);
+      if (idx > -1) A.p[idx] = page;
+      else A.p.push(page);
+      A.edits = { ...A.edits, id: page.id, origContent: content };
+      if (!id)
+        history.replaceState({}, "", "?edit=" + encodeURIComponent(page.slug));
+      const pl = document.getElementById("pl");
+      if (pl) renderPageList(pl);
+    }
+
+    function delPage(id) {
+      const p = A.p.find((x) => x.id === id);
+      if (!p) return;
+      const mo = document.createElement("div");
+      mo.id = "mo";
+      mo.innerHTML = `<div><h3>Seite löschen?</h3><p>Soll "${esc(p.title)}" wirklich gelöscht werden?</p><div class=mo-b><button class="btn btn-o" onclick="this.closest('#mo').remove()">Abbrechen</button><button class="btn btn-d" id=mo-c>Löschen</button></div></div>`;
+      document.body.appendChild(mo);
+      document.getElementById("mo-c").onclick = () => {
+        ST.delPage(id);
+        A.p = A.p.filter((x) => x.id !== id);
+        mo.remove();
+        noti("Gelöscht: " + p.title, "info");
+        nav("?");
+      };
+    }
+
+    function renderSettings(el) {
+      document.title = "Einstellungen | " + A.m.title;
+      el.innerHTML = `<div id=set><h1>Wiki Einstellungen</h1>
+  <label>Titel</label><input id=st-t value="${esc(A.m.title)}">
+  <label>Beschreibung</label><textarea id=st-d>${esc(A.m.description)}</textarea>
+  <div style=margin-top:1.5rem;display:flex;gap:.5rem;flex-wrap:wrap>
+    <button class="btn btn-p" onclick="saveSettings()">💾 Speichern</button>
+    <button class="btn btn-o" onclick="nav('?')">Abbrechen</button>
+    <span style=flex:1></span>
+    <button class="btn btn-o btn-sm" onclick="expAllZip()">📦 Alle exportieren (.zip)</button>
+    <button class="btn btn-o btn-sm" onclick="expAllDir()">📁 In Ordner exportieren</button>
+    <button class="btn btn-o btn-sm" onclick="impFiles()">📂 .md importieren</button>
+  </div>
+  <div class=imp>
+    <strong>Version 1.0.0</strong> &middot; erstellt mit ♥ von <strong>Elmar</strong> für <strong>Bettina</strong><br>
+    <a href="https://github.com/elmohuppi-stack/bettina-wiki" target=_blank>github.com/elmohuppi-stack/bettina-wiki</a>
+  </div></div>`;
+    }
+
+    function saveSettings() {
+      const t = document.getElementById("st-t").value.trim();
+      if (!t) return noti("Titel darf nicht leer sein", "err");
+      A.m.title = t;
+      A.m.description = document.getElementById("st-d").value.trim();
+      ST.putMeta(A.m);
+      document.getElementById("title").textContent = A.m.title;
+      document.getElementById("wt").textContent = A.m.title;
+      noti("Einstellungen gespeichert", "ok");
+    }
+
+    function renderSearch(el, query) {
+      document.title = "Suche: " + query + " | " + A.m.title;
+      const q = query.toLowerCase();
+      const results = [];
+      for (const p of A.p) {
+        const ti = p.title.toLowerCase().includes(q),
+          ci = p.content.toLowerCase().includes(q);
+        if (ti || ci) {
+          const excerpts = [];
+          if (ci) {
+            const idx = p.content.toLowerCase().indexOf(q);
+            const start = Math.max(0, idx - 40);
+            const end = Math.min(p.content.length, idx + q.length + 40);
+            excerpts.push("…" + esc(p.content.slice(start, end)) + "…");
+          }
+          results.push({ page: p, titleMatch: ti, excerpts });
+        }
+      }
+      function escRegex(s) {
+        return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      }
+      const hl = escRegex(esc(q));
+      let html = `<header><h1>Suche: &quot;${esc(query)}&quot;</h1><p style=color:var(--muted)>${results.length} Ergebnis${results.length !== 1 ? "se" : ""}</p></header>`;
+      if (!results.length) html += "<div class=empty>Keine Ergebnisse</div>";
+      else
+        html += `<div id=sr>${results.map((r) => `<div class=sr-r><a href="?page=${encodeURIComponent(r.page.slug)}">${esc(r.page.title)}</a>${r.excerpts.length ? r.excerpts.map((e) => `<div class=sr-ex>${e.replace(new RegExp(hl, "gi"), (m) => `<em>${m}</em>`)}</div>`).join("") : ""}</div>`).join("")}</div>`;
+      el.innerHTML = html;
+    }
+
+    // ═══════════════════════════════════════════
+    // APP: Search Input Handler
+    // ═══════════════════════════════════════════
+    let _sTm = null;
+    document.addEventListener("DOMContentLoaded", () => {
+      const si = document.getElementById("s-i");
+      si.addEventListener("input", function () {
+        clearTimeout(_sTm);
+        const v = this.value.trim();
+        _sTm = setTimeout(() => {
+          if (v) nav("?search=" + encodeURIComponent(v));
+          else nav("?");
+        }, 300);
+      });
+      si.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          const v = e.target.value.trim();
+          if (v) nav("?search=" + encodeURIComponent(v));
+        }
+      });
+    });
+
+    // ═══════════════════════════════════════════
+    // APP: Export / Import
+    // ═══════════════════════════════════════════
+    function expPage(id) {
+      const p = A.p.find((x) => x.id === id);
+      if (!p) return;
+      const blob = new Blob([p.content], { type: "text/markdown" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = p.slug + ".md";
+      a.click();
+      URL.revokeObjectURL(url);
+      noti("Exportiert: " + p.slug + ".md", "ok");
+    }
+
+    async function expAllZip() {
+      if (A.p.length === 0) return noti("Keine Seiten zum Exportieren", "err");
+      if ("showDirectoryPicker" in window) {
+        await expAllDir();
+        return;
+      }
+      for (const p of A.p) {
+        const blob = new Blob([p.content], { type: "text/markdown" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = p.slug + ".md";
+        a.click();
+        URL.revokeObjectURL(url);
+        await new Promise((r) => setTimeout(r, 200));
+      }
+      noti(A.p.length + " Seiten exportiert", "ok");
+    }
+
+    async function expAllDir() {
+      if (!("showDirectoryPicker" in window)) {
+        noti(
+          "File System API wird von diesem Browser nicht unterstützt",
+          "err",
+        );
+        return;
+      }
+      try {
+        const dirHandle = await window.showDirectoryPicker({
+          mode: "readwrite",
+        });
+        for (const p of A.p) {
+          const fileHandle = await dirHandle.getFileHandle(p.slug + ".md", {
+            create: true,
+          });
+          const writable = await fileHandle.createWritable();
+          await writable.write(p.content);
+          await writable.close();
+        }
+        noti(A.p.length + " Seiten in Ordner exportiert", "ok");
+      } catch (e) {
+        if (e.name !== "AbortError")
+          noti("Export fehlgeschlagen: " + e.message, "err");
+      }
+    }
+
+    async function impFiles() {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = ".md,.markdown";
+      input.multiple = true;
+      input.onchange = async () => {
+        const files = Array.from(input.files);
+        let count = 0;
+        for (const file of files) {
+          const content = await file.text();
+          const name = file.name.replace(/\.(md|markdown)$/i, "");
+          let title = name;
+          const hMatch = content.match(/^#\s+(.+)$/m);
+          if (hMatch) title = hMatch[1].trim();
+          const slug = slugify(name);
+          const existing = A.p.find((p) => p.slug === slug);
+          if (existing) {
+            if (
+              !confirm(
+                'Seite "' + title + '" existiert bereits. Überschreiben?',
+              )
+            )
+              continue;
+            existing.content = content;
+            existing.title = title;
+            existing.updated = Date.now();
+            ST.putPage(existing);
+          } else {
+            const page = {
+              id:
+                "p_" +
+                Date.now() +
+                "_" +
+                Math.random().toString(36).slice(2, 6),
+              title,
+              slug,
+              content,
+              created: Date.now(),
+              updated: Date.now(),
+            };
+            A.p.push(page);
+            ST.putPage(page);
+          }
+          count++;
+        }
+        noti(count + " Seiten importiert", "ok");
+        render();
+      };
+      input.click();
+    }
+
+    // ═══════════════════════════════════════════
+    // HELPERS
+    // ═══════════════════════════════════════════
+    function esc(s) {
+      const d = document.createElement("div");
+      d.textContent = s;
+      return d.innerHTML;
+    }
+    function slugify(s) {
+      return (
+        s
+          .toLowerCase()
+          .replace(/[^a-z0-9äöüß\s-]/g, "")
+          .replace(/[\s]+/g, "-")
+          .replace(/^-+|-+$/g, "") || "seite"
+      );
+    }
+    function date(ts) {
+      return new Date(ts).toLocaleDateString("de-DE", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener("keydown", (e) => {
+      const inEditor =
+        document.activeElement && document.activeElement.id === "ed-ta";
+      if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+        e.preventDefault();
+        if (A.edits) savePage();
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === "b" && inEditor) {
+        e.preventDefault();
+        fm("bold");
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === "i" && inEditor) {
+        e.preventDefault();
+        fm("italic");
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === "k" && inEditor) {
+        e.preventDefault();
+        fm("link");
+      }
+    });
+
+    // Beforeunload protection
+    window.addEventListener("beforeunload", (e) => {
+      if (A.edits && A.edits.content !== A.edits.origContent) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    });
+
+    // ═══════════════════════════════════════════
+    // Sidebar buttons
+    // ═══════════════════════════════════════════
+    document.addEventListener("DOMContentLoaded", () => {
+      document
+        .getElementById("bn")
+        .addEventListener("click", () => nav("?edit="));
+      document
+        .getElementById("bs")
+        .addEventListener("click", () => nav("?settings"));
+    });
+
+    // ═══════════════════════════════════════════
+    // INIT
+    // ═══════════════════════════════════════════
+    function init() {
+      A.p = ST.getAllPages();
+      A.m = ST.getMeta();
+      // Beim ersten Start eine Hilfeseite anlegen
+      if (A.p.length === 0) {
+        const help = {
+          id: "p_help",
+          title: "📖 Hilfe & Bedienung",
+          slug: "hilfe",
+          content: `# 📖 Hilfe & Bedienung
+
+Willkommen beim **Bettina Wiki**! Diese Seite erklärt dir die wichtigsten Funktionen.
+
+---
+
+## ➕ Seiten erstellen
+
+Klicke unten in der Seitenleiste auf **+ Neue Seite**.
+Gib einen **Titel** und optional einen **Slug** (URL-Name) ein.
+Schreibe den Inhalt in **Markdown** – die Vorschau rechts zeigt live, wie es später aussieht.
+Klicke auf **💾 Speichern**.
+
+## ✏️ Seiten bearbeiten
+
+Auf jeder Seite gibt es oben rechts den **✏️ Bearbeiten**-Button.
+Auch in der Seitenliste kannst du über den ✏️-Button direkt in den Editor springen.
+
+## 🔗 Wiki-Links
+
+Mit \`[[Seitenname]]\` erzeugst du einen internen Link zu einer anderen Wiki-Seite.
+Mit \`[[Text|seite]]\` kannst du einen abweichenden Anzeigetext festlegen.
+
+Noch nicht existierende Seiten werden beim Anklicken automatisch zur Neuanlage angeboten.
+
+## 🔍 Suchen
+
+Das Suchfeld in der Seitenleiste durchsucht **Titel und Inhalt** aller Seiten.
+Treffer werden mit gelbem Hintergrund hervorgehoben.
+Die Suche startet automatisch 300 ms nach dem letzten Tastendruck.
+
+## ⌨️ Tastaturkürzel
+
+| Kürzel           | Aktion                 |
+| ---------------- | ---------------------- |
+| \`Strg+S\`       | Seite speichern        |
+| \`Strg+B\`       | **Fett**               |
+| \`Strg+I\`       | *Kursiv*               |
+| \`Strg+K\`       | Link einfügen          |
+
+Alle Kürzel funktionieren nur, wenn der Fokus im Editor ist.
+
+## 🎨 Formatierungsleiste
+
+Im Editor findest du eine **Toolbar** mit Buttons für:
+**Fett**, *Kursiv*, Code, Überschriften (H1–H3), Listen, Checkboxen, Zitate, Trennlinien, Tabellen, Code-Blöcke, Links, Bilder und Wiki-Links.
+
+Die Toolbar bleibt beim Scrollen **am oberen Rand kleben** – so hast du sie immer griffbereit.
+
+## 📥 Export / 📤 Import
+
+In den **Einstellungen** (⚙) findest du:
+
+- **📥 .md** – Einzelne Seite als Markdown-Datei herunterladen
+- **📦 Alle exportieren** – Alle Seiten als einzelne Downloads
+- **📁 In Ordner exportieren** – In einen lokalen Ordner speichern (Chromium)
+- **📂 .md importieren** – Eine oder mehrere \`.md\`-Dateien importieren
+
+## ⚙️ Einstellungen
+
+Über den ⚙-Button in der Seitenleiste erreichst du die Einstellungen.
+Dort kannst du **Titel** und **Beschreibung** des Wikis ändern.
+
+## 💾 Autosave
+
+Der Editor speichert **automatisch 800 ms** nach der letzten Eingabe.
+Zusätzlich warnt dich der Browser, wenn du die Seite mit ungespeicherten Änderungen verlassen willst.
+
+---
+
+Viel Spaß mit deinem Wiki! 🎉`,
+          created: Date.now(),
+          updated: Date.now(),
+        };
+        A.p.push(help);
+        ST.putPage(help);
+      }
+      document.getElementById("title").textContent = A.m.title;
+      document.getElementById("wt").textContent = A.m.title;
+      render();
+    }
+    init();
+  </script>
+</html>
