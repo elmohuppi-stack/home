@@ -11,7 +11,6 @@ Schlichte statische Landingpage für `elmarhepp.de` mit Verlinkungen zu:
 - `https://mediathek.elmarhepp.de/`
 - `https://sari.elmarhepp.de/`
 - `https://umami.elmarhepp.de/`
-- `https://weknora.elmarhepp.de/`
 - `bettina-wiki/index.html` (Bettina Wiki – portable Einzeldatei)
 
 ## Dateien
