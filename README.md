@@ -12,6 +12,7 @@ Schlichte statische Landingpage für `elmarhepp.de` mit Verlinkungen zu:
 - `https://sari.elmarhepp.de/`
 - `https://umami.elmarhepp.de/`
 - `bettina-wiki/index.html` (Bettina Wiki – portable Einzeldatei)
+- `https://wandervogel.elmarhepp.de/` (Wandervogel – Wander- und Radtouren planen)
 
 ## Dateien
 
