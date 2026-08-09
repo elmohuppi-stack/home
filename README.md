@@ -67,16 +67,22 @@ make dev PORT=3000
 
 ## Rechtliche Daten
 
-Die Daten für Name, E-Mail und Adresse liegen in `.env`:
+Die Daten für Name, E-Mail und Adresse liegen in `.env` — mit den **echten**
+Werten, und `.env` bleibt aus dem Repository heraus. Hier stehen deshalb nur
+Platzhalter:
 
 ```env
-VITE_LEGAL_NAME="Elmar Hepp"
-VITE_LEGAL_EMAIL="elmar.hepp@gmail.com"
-VITE_LEGAL_ADDRESS_LINE_1="Richard-Wagner-Str. 25"
-VITE_LEGAL_ADDRESS_LINE_2="76744 Wörth am Rhein"
+VITE_LEGAL_NAME="Max Mustermann"
+VITE_LEGAL_EMAIL="kontakt@example.com"
+VITE_LEGAL_ADDRESS_LINE_1="Musterstraße 1"
+VITE_LEGAL_ADDRESS_LINE_2="12345 Musterstadt"
 VITE_LEGAL_COUNTRY="Deutschland"
-VITE_LEGAL_CONTENT_RESPONSIBLE="Elmar Hepp"
+VITE_LEGAL_CONTENT_RESPONSIBLE="Max Mustermann"
 ```
+
+Auch die erzeugte `legal-config.js` ist nicht versioniert — sie enthält
+dieselbe ladungsfähige Anschrift und gehört damit ebenso wenig in ein
+öffentliches Repository wie die `.env` selbst.
 
 Nach Änderungen bitte neu erzeugen:
 

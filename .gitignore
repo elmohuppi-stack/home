@@ -2,3 +2,7 @@
 .DS_Store
 __pycache__/
 *.pyc
+
+# Aus .env erzeugt (make generate) und enthält die ladungsfähige Anschrift.
+# Generat + personenbezogene Daten: gehört nicht ins Repository.
+legal-config.js
