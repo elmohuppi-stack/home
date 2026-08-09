@@ -279,6 +279,19 @@ h1 {
   backdrop-filter: blur(10px);
 }
 
+/* Die Rechtsseiten sind in Abschnitte gegliedert. Die globale Regel setzt
+   h2 auf margin-top: 0 — hier ist der Abstand nach oben aber genau das,
+   was die Abschnitte voneinander trennt. */
+.legal-card h2 {
+  margin-top: 30px;
+  margin-bottom: 8px;
+  font-size: 1.15rem;
+}
+
+.legal-card h2:first-of-type {
+  margin-top: 22px;
+}
+
 .footer-links {
   display: flex;
   flex-wrap: wrap;

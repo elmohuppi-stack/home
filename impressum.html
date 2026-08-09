@@ -4,11 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Impressum · elmarhepp.de</title>
-    <meta name="description" content="Impressum von elmarhepp.de" />
+    <meta
+      name="description"
+      content="Impressum für elmarhepp.de und alle darunter betriebenen Anwendungen"
+    />
+    <link rel="canonical" href="https://elmarhepp.de/impressum" />
+    <!--
+      Selbst gehostete Instanz, nicht Umami Cloud. Bis zum 9. August 2026 lud
+      genau diese Seite das Cloud-Skript: Wer das Impressum aufrief, löste eine
+      Übermittlung an einen Dritten aus, die hier nicht beschrieben war.
+    -->
     <script
       defer
-      src="https://cloud.umami.is/script.js"
-      data-website-id="88483e2b-5334-47fa-b132-5dbf8ec87d6c"
+      src="https://umami.elmarhepp.de/script.js"
+      data-website-id="ada401ea-eddb-4f63-947d-a369bb2b22f2"
     ></script>
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -18,7 +27,13 @@
       <h1>Impressum</h1>
 
       <div class="legal-card">
-        <p><strong>Angaben gemäß § 5 TMG</strong></p>
+        <p>
+          Dieses Impressum gilt für <strong>elmarhepp.de</strong> und für alle
+          Anwendungen, die unter einer Subdomain von <code>elmarhepp.de</code>
+          betrieben werden. Betreiber ist in allen Fällen dieselbe Person.
+        </p>
+
+        <p><strong>Angaben gemäß § 5 DDG</strong></p>
         <p>
           <span data-legal-text="name">Name</span><br />
           <span data-legal-text="addressLine1">Straße und Hausnummer</span
@@ -38,16 +53,49 @@
         <p>
           <strong>Inhaltlich verantwortlich gemäß § 18 Abs. 2 MStV</strong
           ><br />
-          <span data-legal-text="responsible">Verantwortliche Person</span>
+          <span data-legal-text="responsible">Verantwortliche Person</span
+          ><br />
+          <span data-legal-text="addressLine1">Straße und Hausnummer</span
+          ><br />
+          <span data-legal-text="addressLine2">PLZ Ort</span>
         </p>
 
-        <p class="small-note">
-          Die Angaben werden aus deiner lokalen <code>.env</code> bzw. der
-          Deployment-Konfiguration geladen.
+        <p>
+          <strong>Haftung für Inhalte</strong><br />
+          Die Inhalte dieser Seiten wurden mit Sorgfalt erstellt. Für
+          Richtigkeit, Vollständigkeit und Aktualität wird keine Gewähr
+          übernommen. Das gilt ausdrücklich auch für berechnete oder aus
+          fremden Quellen übernommene Angaben in den einzelnen Anwendungen —
+          etwa Preise, Wetterdaten, Routen oder Auswertungen. Sie ersetzen
+          keine eigene Prüfung.
+        </p>
+
+        <p>
+          <strong>Haftung für Links</strong><br />
+          Für die Inhalte verlinkter externer Seiten sind ausschließlich deren
+          Betreiber verantwortlich.
+        </p>
+
+        <p>
+          <strong>Urheberrecht</strong><br />
+          Die eigenen Inhalte dieser Seiten unterliegen dem deutschen
+          Urheberrecht. Wo einzelne Anwendungen fremde Daten verwenden, ist die
+          Quelle in der jeweiligen Anwendung genannt.
+        </p>
+
+        <p>
+          <strong>Verbraucherstreitbeilegung</strong><br />
+          Es besteht keine Verpflichtung und keine Bereitschaft, an
+          Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle
+          teilzunehmen.
         </p>
       </div>
 
-      <p><a class="back-link" href="index.html">← Zurück zur Startseite</a></p>
+      <p>
+        <a class="back-link" href="datenschutz">Datenschutzerklärung</a>
+        &nbsp;·&nbsp;
+        <a class="back-link" href="index.html">← Zurück zur Startseite</a>
+      </p>
     </main>
     <script src="legal-config.js"></script>
     <script src="app.js" defer></script>
