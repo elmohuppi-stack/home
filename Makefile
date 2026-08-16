@@ -21,8 +21,8 @@ help:
 	@echo "║    DEPLOY_PATH=...   – Zielverzeichnis auf Server   ║"
 	@echo "║                                                      ║"
 	@echo "║  Hinweis: Dies ist ein Sonderfall (statische Seite). ║"
-	@echo "║  Für Apps mit Backend/API/DB siehe:                  ║"
-	@echo "║  docs/deployment-standard.md                         ║"
+	@echo "║  Für Apps mit Backend/API/DB siehe das Repo          ║"
+	@echo "║  'platform' – NEUE-APP.md und DEPLOYMENT.md.         ║"
 	@echo "║                                                      ║"
 	@echo "╚══════════════════════════════════════════════════════╝"
 
@@ -62,19 +62,25 @@ dev: generate
 	open http://localhost:$(PORT); \
 	wait $$server_pid
 
-deploy: generate
+# Kein 'generate' als Voraussetzung: legal-config.js wird auf dem Server aus
+# /etc/elmarhepp/legal.env erzeugt, nicht hier hochgeladen. Die lokale .env ist
+# nur zum Entwickeln da und darf die maßgebliche Fassung nicht überschreiben.
+deploy:
 	@echo "Deploye statische Seite zu $(DEPLOY_HOST):$(DEPLOY_PATH) ..."
 	rsync -av --delete \
 		--exclude '.git/' \
 		--exclude '.env' \
+		--exclude '.env.example' \
+		--exclude '.gitignore' \
 		--exclude '.vscode/' \
 		--exclude 'docs/' \
-		--exclude 'scripts/' \
 		--exclude 'Makefile' \
 		--exclude 'README.md' \
-		--exclude '.gitignore' \
-		--exclude '.env.example' \
+		--exclude 'legal-config.js' \
 		./ "$(DEPLOY_HOST):$(DEPLOY_PATH)/"
+	@echo ""
+	@echo "Betreiberangaben auf dem Server neu erzeugen ..."
+	ssh "$(DEPLOY_HOST)" 'cd $(DEPLOY_PATH) && bash scripts/generate-legal-config.sh'
 	@echo ""
 	@echo "✅ Upload abgeschlossen: $(DEPLOY_HOST):$(DEPLOY_PATH)"
 	@echo "   https://elmarhepp.de/ sollte jetzt aktualisiert sein."

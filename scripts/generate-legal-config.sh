@@ -8,7 +8,7 @@
 #
 # Zwei Quellen, in dieser Reihenfolge:
 #
-#   1. /etc/hetzner/legal.env  — auf dem Server die maßgebliche Fassung. Sie liegt
+#   1. /etc/elmarhepp/legal.env — auf dem Server die maßgebliche Fassung. Sie liegt
 #      außerhalb jedes App-Verzeichnisses, damit kein Deploy sie überschreibt und
 #      kein Repository sie erfasst. Variablen ohne Präfix (LEGAL_NAME, ...).
 #   2. ./.env                  — lokal zum Entwickeln. Variablen mit VITE_-Präfix,
@@ -20,7 +20,7 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-ZENTRAL=/etc/hetzner/legal.env
+ZENTRAL=/etc/elmarhepp/legal.env
 QUELLE=""
 
 if [[ -r $ZENTRAL ]]; then
@@ -70,7 +70,7 @@ if fehlend:
 
 Path("legal-config.js").write_text(
     "// Erzeugt von scripts/generate-legal-config.sh — nicht von Hand ändern,\n"
-    "// nicht versionieren. Quelle der Werte: /etc/hetzner/legal.env\n"
+    "// nicht versionieren. Quelle der Werte: /etc/elmarhepp/legal.env\n"
     "window.LEGAL_CONFIG = " + json.dumps(config, ensure_ascii=False, indent=2) + ";\n",
     encoding="utf-8",
 )

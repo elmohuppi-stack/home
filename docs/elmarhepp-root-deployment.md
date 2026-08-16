@@ -1,165 +1,96 @@
-# Deployment-Dokumentation: `elmarhepp.de`
+# Deployment: `elmarhepp.de`
 
-> **⚠️ Sonderfall – kein Docker-Deployment**
->
-> Diese statische Landingpage ist **bewusst kein Teil des Docker-basierten Deployment-Standards**
-> (siehe [`deployment-standard.md`](deployment-standard.md)). Der Grund: Für 7 statische Dateien
-> (HTML, CSS, JS, SVG) einen Nginx-Container zu starten wäre Overkill. Stattdessen wird die Seite
-> per `rsync` direkt auf den Server kopiert und von Nginx über die `root`-Directive ausgeliefert.
->
-> **Alle anderen Apps** (mit Backend, API, Datenbank) folgen dem Standard in `deployment-standard.md`.
+> **Sonderfall — kein Docker.** Für sieben statische Dateien einen Container zu
+> starten wäre Aufwand ohne Gegenwert. Die Seite wird per `rsync` in ein
+> Verzeichnis kopiert und vom Host-`nginx` über die `root`-Directive
+> ausgeliefert. **Alle anderen Apps** folgen dem Standard im Repo `platform`
+> (`NEUE-APP.md`, `ARCHITEKTUR.md`, `DEPLOYMENT.md`) — dieses Dokument
+> beschreibt ausdrücklich nur die Ausnahme.
 
-## Ziel
+## Server
 
-Die statische Landingpage soll unter folgenden Domains erreichbar sein:
+| | |
+|---|---|
+| Host | **nuernberg-16gb** bei netcup, SSH-Alias `elmarhepp` |
+| Webserver | Host-`nginx` als Router für alle Subdomains |
+| TLS | Let's Encrypt / certbot, Erneuerung per `certbot.timer` |
+| Deploy-Pfad | `/var/www/elmarhepp-root` |
 
-- `https://elmarhepp.de/`
-- `https://www.elmarhepp.de/` → Redirect auf `https://elmarhepp.de/`
+> **Bis zum 15. August 2026 lief das auf einem Hetzner-Server.** Der Umzug ist in
+> `platform/UMZUG-NETCUP.md` protokolliert. Pfade wie `/etc/hetzner/` gibt es
+> seitdem nicht mehr; die Betreiberangaben liegen in `/etc/elmarhepp/legal.env`.
 
-Dabei muss das bestehende **Multi-App-Setup** auf Hetzner erhalten bleiben, damit weitere Websites parallel über Subdomains betrieben werden können.
+## Domains
 
----
+- `https://elmarhepp.de/` — die Seite
+- `https://www.elmarhepp.de/` — 301 auf die Hauptdomain
+- `http://…` — 301 auf HTTPS
 
-## Server-Setup
+Zertifikat unter `/etc/letsencrypt/live/elmarhepp.de/`, ausgestellt für beide
+Namen.
 
-- **Host:** Hetzner-Server (`ssh elmarhepp`)
-- **Webserver:** `nginx`
-- **TLS:** Let's Encrypt / Certbot
-- **Deploy-Pfad:** `/var/www/elmarhepp-root`
-
-Die bereits laufenden Apps bleiben dabei unberührt, zum Beispiel:
-
-- `finanzen.elmarhepp.de`
-- `benzin.elmarhepp.de`
-- `elmo-scanner.elmarhepp.de`
-
----
-
-## Hochgeladene Dateien
-
-Die Landingpage wurde als statische Website nach folgendem Ziel kopiert:
-
-```text
-/var/www/elmarhepp-root
-```
-
-Upload-Prinzip:
-
-```bash
-rsync -av --delete --exclude '.git/' --exclude '.env' --exclude '.vscode/' ./ elmarhepp:/var/www/elmarhepp-root/
-```
-
----
-
-## Nginx-Konfiguration
-
-Verwendete Site-Datei:
-
-```text
-/etc/nginx/sites-available/elmarhepp-root.conf
-```
-
-Diese Konfiguration übernimmt:
-
-1. HTTP → HTTPS Redirect für `elmarhepp.de`
-2. Redirect von `www.elmarhepp.de` auf die Hauptdomain
-3. Auslieferung der statischen Website aus `/var/www/elmarhepp-root`
-
-Zusätzlich wurde die bisherige Platzhalter-Konfiguration so bereinigt, dass sie als generischer Default für weitere Apps dienen kann:
-
-```text
-/etc/nginx/sites-available/root-placeholder.conf
-```
-
-Dort bleibt bewusst nur ein generisches:
-
-```nginx
-server_name _;
-```
-
-Damit kollidiert die Root-Domain künftig nicht mit neuen Subdomain-Projekten.
-
----
-
-## TLS / Zertifikate
-
-Für die Root-Domain wurde ein eigenes Zertifikat erstellt:
-
-```text
-/etc/letsencrypt/live/elmarhepp.de/
-```
-
-Ausgestellt für:
-
-- `elmarhepp.de`
-- `www.elmarhepp.de`
-
-Beispiel-Befehl:
-
-```bash
-certbot certonly --webroot -w /var/www/elmarhepp-root -d elmarhepp.de -d www.elmarhepp.de --non-interactive --agree-tos -m elmar.hepp@gmail.com --keep-until-expiring
-```
-
----
-
-## Verifikation
-
-Der Live-Stand wurde geprüft mit:
-
-```bash
-curl -I -L https://elmarhepp.de/
-curl -I http://www.elmarhepp.de/
-curl -I https://finanzen.elmarhepp.de/
-curl -I https://benzin.elmarhepp.de/
-curl -I https://elmo-scanner.elmarhepp.de/
-```
-
-Ergebnis:
-
-- `https://elmarhepp.de/` → `200 OK`
-- `http://www.elmarhepp.de/` → `301 Moved Permanently`
-- bestehende Subdomain-Seiten → weiterhin `200 OK`
-
-Zusätzlich wurde geprüft, dass die Landingpage tatsächlich live ausgeliefert wird, u. a. über den Text:
-
-```text
-Der einfache Einstieg zu meinen Webprojekten.
-```
-
----
-
-## Hinweise für spätere Erweiterungen
-
-Wenn weitere Apps hinzukommen, sollte das bestehende Muster beibehalten werden:
-
-- jede App mit eigener Subdomain
-- eigene Nginx-Site pro App
-- keine App direkt auf Port `80/443`
-- zentraler Host-`nginx` als Router
-- TLS pro Domain bzw. Domain-Gruppe über Certbot
-
-Die allgemeine Vorlage dafür liegt in:
-
-```text
-docs/hetzner-multi-app-template.md`
-```
-
-Der **Deployment-Standard** für alle Apps mit Backend/API/DB ist dokumentiert in:
-
-```text
-docs/deployment-standard.md
-```
-
----
-
-## Empfohlener Redeploy
-
-Wenn sich die Landingpage ändert:
+## Redeploy
 
 ```bash
 cd /Users/elmarhepp/workspace/home
-make generate
-make deploy DEPLOY_HOST=elmarhepp
+make deploy
 ```
 
-Da es eine statische Seite ist, ist normalerweise **kein Neustart einer App** nötig. `nginx` muss nur dann neu geladen werden, wenn sich die Server-Konfiguration selbst ändert.
+`DEPLOY_HOST=elmarhepp` und `DEPLOY_PATH=/var/www/elmarhepp-root` sind im
+`Makefile` vorgegeben; beide müssen im Normalfall nicht gesetzt werden. Das Ziel
+lädt per `rsync --delete` hoch und ruft danach auf dem Server
+`scripts/generate-legal-config.sh` auf.
+
+Ein Neustart ist nicht nötig. `nginx` wird nur neu geladen, wenn sich die
+Server-Konfiguration selbst ändert.
+
+## Was der Webroot nicht enthalten darf
+
+`/var/www/elmarhepp-root` **ist** der öffentliche Webroot: jede Datei darin ist
+unter `https://elmarhepp.de/<pfad>` abrufbar. Bis zum 16. August 2026 lagen dort
+`README.md`, das `Makefile` und `docs/` — inklusive dieser Datei und einer Kopie
+der nginx-Site — und waren mit `200` abrufbar. Sie stammten aus einem Upload,
+bevor der `rsync` seine `--exclude`-Liste bekam; da `--exclude` eine Datei
+zugleich vor `--delete` schützt, wären sie von allein nie verschwunden.
+
+Zwei Maßnahmen, die zusammengehören:
+
+- Der `rsync` in `deploy` schließt `Makefile`, `README.md` und `docs/` aus.
+- Die nginx-Site sperrt `/scripts/` und alles, was mit einem Punkt beginnt.
+  `scripts/` **muss** hochgeladen werden — der Server erzeugt damit
+  `legal-config.js` —, darf aber nicht ausgeliefert werden.
+
+Eine Ausnahme in die andere Richtung: `legal-config.js` wird **nicht**
+hochgeladen. Es entsteht auf dem Server aus `/etc/elmarhepp/legal.env`; ein
+Upload aus der lokalen `.env` könnte das Impressum stillschweigend auf einen
+alten Stand zurücksetzen.
+
+## Zwei Zeilen in der nginx-Site, die man kennen muss
+
+```nginx
+try_files $uri $uri.html $uri/ /index.html;
+```
+
+Das `$uri.html` ist seit dem 9. August 2026 nötig. Ohne es liefert `/impressum`
+die Startseite aus, weil der SPA-Fallback greift — und genau auf diese beiden
+Pfade zeigen die Fußzeilen **aller** Apps unter `elmarhepp.de`
+(`platform/DEPLOYMENT.md`, Abschnitt 9).
+
+```nginx
+location ~ ^/(scripts|\.) { return 404; }
+```
+
+Die Sperre aus dem Abschnitt oben.
+
+Sicherung der Konfiguration vor der Impressum-Änderung:
+`/etc/nginx/sites-available/elmarhepp-root.conf.bak-2026-08-09`.
+
+## Prüfung nach einem Deploy
+
+```bash
+curl -I https://elmarhepp.de/                     # 200
+curl -I http://www.elmarhepp.de/                  # 301
+curl -sI https://elmarhepp.de/impressum | head -1 # 200, nicht die Startseite
+curl -sI https://elmarhepp.de/scripts/generate-legal-config.sh | head -1  # 404
+curl -s  https://elmarhepp.de/legal-config.js | head -3                   # echte Werte
+```
